@@ -1,0 +1,18 @@
+Install anaconda
+In anaconda console type:
+$ conda create -c rdkit -n my-rdkit-env rdkit
+Take note of where it installs the virtual env to, likely C:\Users\<USERNAME>\AppData\Local\Continuum\\anaconda3\envs\my-rdkit-env
+Open a new project in pycharm, set the interperter to python.exe within the virtual env
+Enjoy rdkit, unless your default pycharm path is lame af (the error will say unable to import DLL's) in which case:
+
+Open anaconda console again and type:
+$ activate my-rdkit-env
+$ python
+$ import sys
+$ sys.path
+Copy the output string
+go back to pycharm
+at the top of your script write:
+paths = (PASTE PATHS)
+os.environ['PATH'] += paths
+NOW enjoy rdkit

@@ -1,0 +1,8 @@
+ACTIVATING RDKIT ENV
+activate rdkit_env
+
+WHERE RDKIT IS INSTALLED TO
+C:\Users\jsmith20\AppData\Local\Continuum\anaconda3\envs\rdkit_env\python.exe
+
+POINTING JUPYTER NOTEBOOK TO PROPER ENV
+python -m ipykernel install --user --name rdkit_env --display-name "Python (rdkit_env)"
