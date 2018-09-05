@@ -4,9 +4,10 @@ import numpy as np
 from rdkit import Chem
 from rdkit.Chem import AllChem
 import pickle
-# import pubchempy
+import pubchempy
 
-PATH = os.getcwd()
+PATH = '.'
+fingerprints = os.path.join(PATH, 'Fingerprints')
 data_csv = 'Information_Files\\enamine.csv' 
 
 class dmso:
@@ -36,8 +37,8 @@ class dmso:
             self.data['fingerprints'] = self.data['SMILES'].apply(self.morgan)
         elif maccs:
             self.data['fingerprints'] = self.data['SMILES'].apply(self.maccs)
-        # elif pubchem:
-        #     self.data['fingerprints'] = self.data['SMILES'].apply(self.pubchem)
+        elif pubchem:
+            self.data['fingerprints'] = self.data['SMILES'].apply(self.pubchem)
 
     def one_hot(self, column):
         """
@@ -68,31 +69,40 @@ class dmso:
         y = list(AllChem.GetMACCSKeysFingerprint(x))
         return y
 
-    # def pubchem(self, column):
-    #     try:
-    #         x = pubchempy.get_compounds(column, namespace='smiles')[0].cactvs_fingerprint
-    #         y = list(x)
-    #     except:
-    #         print('lol')
-    #         return None
-    #     return y
+    def pubchem(self, column):
+        try:
+            x = pubchempy.get_compounds(column, namespace='smiles')[0].cactvs_fingerprint
+            y = list(x)
+        except:
+            print('lol')
+            return None
+        return y
 
 if __name__== '__main__':
     nbits = 1024
-    if 'morgan_df_{}.p'.format(nbits) not in os.listdir(os.getcwd()):
+    if 'morgan_{}_df.p'.format(nbits) not in os.listdir(fingerprints):
         x = dmso()
         x.obtain_data(morgan=True, nbits=nbits)
         print('done yo')
         pickle.dump(x.data, open('Fingerprints\\morgan_df_{}.p'.format(nbits), 'wb+'))
-
+    
+    del x
     if 'maccs_df.p' not in os.listdir(os.getcwd()):
         x = dmso()
         x.obtain_data(maccs=True)
         pickle.dump(x.data, open('Fingerprints\\maccs_df.p', 'wb+'))
-#
-#
-    # del x
-    # if 'pubchem_df.p' not in os.listdir(os.getcwd()):
-    #     x = dmso()
-    #     x.obtain_data(pubchem=True)
-    #     pickle.dump(x, open('pubchem_df.p', 'wb+'))
+
+    del x
+    if 'pubchem_df.p' not in os.listdir(os.getcwd()):
+        x = dmso()
+        x.obtain_data(pubchem=True)
+        pickle.dump(x, open('pubchem_df.p', 'wb+'))
+
+
+
+
+
+
+
+
+
